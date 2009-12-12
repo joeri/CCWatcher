@@ -1,0 +1,52 @@
+<html>
+<head><title>CC Watchman OptionPage</title></head>
+<script type="text/javascript">
+
+// Saves options to localStorage.
+function save_options() {
+	var select = document.getElementById("rsslink").value;
+	if(select.substring(0, 43) == 'http://www.conquerclub.com/rss.php?user_id='){
+		localStorage["rsslink"] = select;
+
+		// Update status to let user know options were saved.
+		var error = document.getElementById("error");
+		error.innerHTML = "";
+		var status = document.getElementById("status");
+		status.innerHTML = "Options Saved.";
+		setTimeout(function() {
+			status.innerHTML = "";
+		}, 750);
+	} else {
+		var error = document.getElementById("error");
+		error.innerHTML = "Error: Illegal url. Must be in the following format: http://www.conquerclub.com/rss.php?user_id=xxxxxx (xxxxxx = your userid).<br />The link can be found on the <a href=\"http://www.conquerclub.com/player.php?mode=mygames\">My Games</a> page on conquerclub.com under the RSS fead link.";
+		setTimeout(function() {
+			status.innerHTML = "";
+		}, 2500);
+	}
+  
+  
+}
+
+// Restores select box state to saved value from localStorage.
+function restore_options() {
+  var rsslink = localStorage["rsslink"];
+  if (!rsslink) {
+    return;
+  }
+  var select = document.getElementById("rsslink").value = rsslink;
+}
+
+</script>
+
+<body onload="restore_options()">
+
+<div id="status"></div>
+<div id="error" style="color:red;font-weight:bold;"></div>
+
+Rss Link (Find it <a href="http://www.conquerclub.com/player.php?mode=mygames">here</a>!):
+<input id="rsslink" type="text" id="rsslink" name="rsslink" />
+
+<br>
+<button onclick="save_options()">Save</button>
+</body>
+</html>

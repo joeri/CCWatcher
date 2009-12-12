@@ -1,0 +1,59 @@
+<html>
+<head>
+<script>
+	alert("test");
+
+	var ccURL = "http://www.conquerclub.com";
+	var pollInterval = 1000 * 15;  // 15 seconds
+	var requestTimeout = 1000 * 10;  // 10 seconds
+	var gmailRe = /https?\:\/\/www.conquerclub.com\/(?!a\/)/;
+
+
+	function initialize()
+	{
+		window.setTimeout(startRequest, 0);
+	}
+
+	function scheduleRequest() {
+		window.setTimeout(startRequest, pollInterval);
+	}
+
+	function startRequest() {
+		getUpdates();
+		scheduleRequest();
+	}
+
+	function getUpdates(){
+		var xmlhttp=new window.XMLHttpRequest();
+		xmlhttp.open("GET",localStorage["rsslink"],false);
+		xmlhttp.send(null);
+		var xmlDoc = xmlhttp.responseXML.documentElement;
+		var x = xmlDoc.getElementsByTagName("title");
+		var message = "";
+
+		for(i=1;i<x.length;i++){
+			if(x[i].childNodes[0].nodeValue.indexOf('READY', 0) != -1){
+				message = "!";
+			}
+		}
+		
+		chrome.browserAction.setBadgeText({text:message});
+	}
+
+	function scheduleRequest() {
+		window.setTimeout(startRequest, pollInterval);
+	}
+
+	chrome.extension.onRequest.addListener(
+		function(request, sender, sendResponse) {
+			if (request.rsslink != ""){
+				localStorage["rsslink"] = request.rsslink;
+			}else
+				sendResponse({}); // snub them.
+	});
+</script>
+</script> 
+</head> 
+<body onload="initialize()"> 
+</body> 
+</html> 

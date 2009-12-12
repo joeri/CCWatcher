@@ -1,0 +1,82 @@
+<style>
+	body {
+	  min-width:357px;
+	  overflow-x:hidden;
+	  font-family:verdana;
+	  font-size: 10px;
+	}
+	
+	h1 a:visited, h1 a{
+		color: #00C;
+		font-underline: none;
+	}
+	
+	a:visited {
+		color: #00C;
+	}
+	
+	#list{
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+	}
+	
+	li {
+		padding: 2px;
+		padding-top: 5px;
+		padding-bottom: 5px;
+		min-height: 10px;
+		min-width: 100%;
+	}
+
+	li:hover {
+		background-color: #E8EDEB;
+	}
+	
+	#ready{
+		color: red;
+	}
+	
+	img {
+	  margin:5px;
+	  border:2px solid black;
+	  vertical-align:middle;
+	  width:75px;
+	  height:75px;
+	}
+</style>
+
+<script> 
+	document.write("<a target=\"_blank\" href=\"" + chrome.extension.getURL("options.html") + "\">Change options</a>")
+	var xmlhttp=new window.XMLHttpRequest();
+	xmlhttp.open("GET",localStorage["rsslink"],false);
+	xmlhttp.send(null);
+	var xmlDoc = xmlhttp.responseXML.documentElement;
+	var x = xmlDoc.getElementsByTagName("title");
+	var y = xmlDoc.getElementsByTagName("link");
+	
+	var title = x[0].childNodes[0].nodeValue;
+	title = title.substring(14, 100)
+	var message = "";
+	
+	var text = "<head></head><body><h1><a target=\"_blank\" alt=\"Go to the next game\" href=\"http://www.conquerclub.com/player.php?mode=next\">" + title + "</a></h1><span id=\"content\"><ul id=\"list\"";
+	
+	for(i=1;i<x.length;i++){
+		text += "<li>";
+	
+		if(x[i].childNodes[0].nodeValue.indexOf('READY', 0) != -1){
+			text += "<a target=\"_blank\" style=\"color: red;\" href=\"" + y[i].childNodes[0].nodeValue + "\">" + x[i].childNodes[0].nodeValue + "</a><br />";
+		} else {
+			text += "<a target=\"_blank\" href=\"" + y[i].childNodes[0].nodeValue + "\">" + x[i].childNodes[0].nodeValue + "</a><br />";
+		}
+		
+		text += "</li>";
+		
+		if(x[i].childNodes[0].nodeValue.indexOf('READY', 0) != -1){
+			var message = "!";
+		} 
+	}
+	
+	chrome.browserAction.setBadgeText({text:message});
+	document.write(text + "</ul></span></body></html>");
+</script>
