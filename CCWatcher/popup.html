@@ -1,9 +1,9 @@
 <style>
 	body {
-	  min-width:357px;
-	  overflow-x:hidden;
-	  font-family:verdana;
-	  font-size: 10px;
+		min-width:357px;
+		overflow-x:hidden;
+		font-family:verdana;
+		font-size: 10px;
 	}
 	
 	h1 a:visited, h1 a{
@@ -38,11 +38,15 @@
 	}
 	
 	img {
-	  margin:5px;
-	  border:2px solid black;
-	  vertical-align:middle;
-	  width:75px;
-	  height:75px;
+		margin:5px;
+		border:2px solid black;
+		vertical-align:middle;
+		width:75px;
+		height:75px;
+	}
+	
+	a.ready{
+		color: red;
 	}
 </style>
 
@@ -59,13 +63,13 @@
 	title = title.substring(14, 100)
 	var message = "";
 	
-	var text = "<head></head><body><h1><a target=\"_blank\" alt=\"Go to the next game\" href=\"http://www.conquerclub.com/player.php?mode=next\">" + title + "</a></h1><span id=\"content\"><ul id=\"list\"";
+	var text = "<head></head><body><h1><a target=\"_blank\" alt=\"Go to the next game\" href=\"http://www.conquerclub.com/player.php?mode=mygames1&next=Y\">" + title + "</a></h1><span id=\"content\"><ul id=\"list\"";
 	
 	for(i=1;i<x.length;i++){
 		text += "<li>";
 	
 		if(x[i].childNodes[0].nodeValue.indexOf('READY', 0) != -1){
-			text += "<a target=\"_blank\" style=\"color: red;\" href=\"" + y[i].childNodes[0].nodeValue + "\">" + x[i].childNodes[0].nodeValue + "</a><br />";
+			text += "<a target=\"_blank\" class=\"ready\" href=\"" + y[i].childNodes[0].nodeValue + "\">" + x[i].childNodes[0].nodeValue + "</a><br />";
 		} else {
 			text += "<a target=\"_blank\" href=\"" + y[i].childNodes[0].nodeValue + "\">" + x[i].childNodes[0].nodeValue + "</a><br />";
 		}

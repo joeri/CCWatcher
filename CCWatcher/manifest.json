@@ -1,6 +1,6 @@
 {
   "name": "Conquer Club Watcher",
-  "version": "0.3",
+  "version": "0.4.1",
   "description": "This extension is meant to check your games and notify you when it's your turn.",
   "options_page": "options.html",
   "browser_action": {

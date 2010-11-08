@@ -7,6 +7,7 @@ function save_options() {
 	var select = document.getElementById("rsslink").value;
 	if(select.substring(0, 43) == 'http://www.conquerclub.com/rss.php?user_id='){
 		localStorage["rsslink"] = select;
+		localStorage["refresh"] = document.getElementById("refreshinterval").value;
 
 		// Update status to let user know options were saved.
 		var error = document.getElementById("error");
@@ -30,10 +31,17 @@ function save_options() {
 // Restores select box state to saved value from localStorage.
 function restore_options() {
   var rsslink = localStorage["rsslink"];
-  if (!rsslink) {
-    return;
+  var refresh = localStorage["refresh"];
+  
+  if (rsslink) {
+    document.getElementById("rsslink").value = rsslink;
   }
-  var select = document.getElementById("rsslink").value = rsslink;
+  
+  if(refresh){
+	document.getElementById("refreshinterval").value = refresh;
+  }
+  
+  return;  
 }
 
 </script>
@@ -45,6 +53,9 @@ function restore_options() {
 
 Rss Link (Find it <a href="http://www.conquerclub.com/player.php?mode=mygames">here</a>!):
 <input id="rsslink" type="text" id="rsslink" name="rsslink" />
+<br />
+Refresh Interval:
+<input id="refreshinterval" type="text" id="refreshinterval" name="refreshinterval" /> Seconds
 
 <br>
 <button onclick="save_options()">Save</button>
