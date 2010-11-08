@@ -50,8 +50,16 @@
 	}
 </style>
 
-<script> 
-	document.write("<a target=\"_blank\" href=\"" + chrome.extension.getURL("options.html") + "\">Change options</a>")
+<script>
+	function isDefined( variable){
+		return (typeof(window[variable]) == "undefined")?  false: true;
+	}
+ 
+	if(!isDefined(localStorage["refresh"])){
+		localStorage["refresh"] = 60;
+	}
+
+	document.write("<a target=\"_blank\" href=\"" + chrome.extension.getURL("options.html") + "\">Change options</a>" + localStorage["refresh"])
 	var xmlhttp=new window.XMLHttpRequest();
 	xmlhttp.open("GET",localStorage["rsslink"],false);
 	xmlhttp.send(null);

@@ -1,8 +1,11 @@
 <html>
 <head>
 <script>
+	function isDefined( variable){
+		return (typeof(window[variable]) == "undefined")?  false: true;
+	}
+	
 	var ccURL = "http://www.conquerclub.com";
-	var pollInterval = 1000 * localStorage["refresh"];  // 15 seconds
 	var requestTimeout = 1000 * 10;  // 10 seconds
 	var gmailRe = /https?\:\/\/www.conquerclub.com\/(?!a\/)/;
 
@@ -22,6 +25,8 @@
 	}
 
 	function getUpdates(){
+		var pollInterval = 1000 * localStorage["refresh"];
+	
 		var xmlhttp=new window.XMLHttpRequest();
 		xmlhttp.open("GET",localStorage["rsslink"],false);
 		xmlhttp.send(null);
@@ -44,6 +49,10 @@
 
 	chrome.extension.onRequest.addListener(
 		function(request, sender, sendResponse) {
+			if(!isDefined(localStorage["refresh"])){
+				localStorage["refresh"] = 60;
+			}
+		
 			if (request.rsslink != ""){
 				localStorage["rsslink"] = request.rsslink;
 			}else

@@ -2,12 +2,18 @@
 <head><title>CC Watchman OptionPage</title></head>
 <script type="text/javascript">
 
+function isDefined( variable){
+	return (typeof(window[variable]) == "undefined")?  false: true;
+}
+
 // Saves options to localStorage.
 function save_options() {
 	var select = document.getElementById("rsslink").value;
-	if(select.substring(0, 43) == 'http://www.conquerclub.com/rss.php?user_id='){
+	var refreshInterval = document.getElementById("refreshinterval").value;
+	
+	if(select.substring(0, 43) == 'http://www.conquerclub.com/rss.php?user_id=' && !isDefined(refreshInterval) && refreshInterval >= 10){
 		localStorage["rsslink"] = select;
-		localStorage["refresh"] = document.getElementById("refreshinterval").value;
+		localStorage["refresh"] = refreshInterval;
 
 		// Update status to let user know options were saved.
 		var error = document.getElementById("error");
@@ -19,7 +25,11 @@ function save_options() {
 		}, 750);
 	} else {
 		var error = document.getElementById("error");
-		error.innerHTML = "Error: Illegal url. Must be in the following format: http://www.conquerclub.com/rss.php?user_id=xxxxxx (xxxxxx = your userid).<br />The link can be found on the <a href=\"http://www.conquerclub.com/player.php?mode=mygames\">My Games</a> page on conquerclub.com under the RSS fead link.";
+		
+		if(select.substring(0, 43) != 'http://www.conquerclub.com/rss.php?user_id=')
+			error.innerHTML = "Error: Illegal url. Must be in the following format: http://www.conquerclub.com/rss.php?user_id=xxxxxx (xxxxxx = your userid).<br />The link can be found on the <a href=\"http://www.conquerclub.com/player.php?mode=mygames\">My Games</a> page on conquerclub.com under the RSS fead link.";
+		else 
+			error.innerHTML = "The Conquer Club RSS feed which is used by this extension is only updated every 5 minutes. So a refresh interval of less then 10 seconds is not allowed. (Only Numbers 0-9 are allowed!)";
 		setTimeout(function() {
 			status.innerHTML = "";
 		}, 2500);
