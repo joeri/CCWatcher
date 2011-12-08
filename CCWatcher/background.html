@@ -23,6 +23,7 @@
 				chrome.browserAction.setBadgeText({text: "&hellip;"});
 			}
 			getUpdates();
+			errors = 0;
 		} catch(error) {
 			chrome.browserAction.setBadgeText({text: "?"});
 			errors = errors + 1;
