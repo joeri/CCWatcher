@@ -7,25 +7,31 @@
 	
 	var ccURL = "http://www.conquerclub.com";
 	var requestTimeout = 1000 * 10;  // 10 seconds
+	var pollInterval   = 1000 * (localStorage["refresh"] || 60);
 	var gmailRe = /https?\:\/\/www.conquerclub.com\/(?!a\/)/;
 
+	var errors = 0;
 
 	function initialize()
 	{
 		window.setTimeout(startRequest, 0);
 	}
 
-	function scheduleRequest() {
-		window.setTimeout(startRequest, pollInterval);
-	}
-
 	function startRequest() {
-		getUpdates();
+		try {
+			if (errors) {
+				chrome.browserAction.setBadgeText({text: "&hellip;"});
+			}
+			getUpdates();
+		} catch(error) {
+			chrome.browserAction.setBadgeText({text: "?"});
+			errors = errors + 1;
+		}
 		scheduleRequest();
 	}
 
 	function getUpdates(){
-		var pollInterval = 1000 * localStorage["refresh"];
+		pollInterval = 1000 * localStorage["refresh"];
 	
 		var xmlhttp=new window.XMLHttpRequest();
 		xmlhttp.open("GET",localStorage["rsslink"],false);
@@ -44,7 +50,12 @@
 	}
 
 	function scheduleRequest() {
-		window.setTimeout(startRequest, pollInterval);
+		if (errors) {
+			var interval = Math.min(600 * 1000, pollInterval * Math.pow(1.5, errors));
+			window.setTimeout(startRequest, interval);
+		} else {
+			window.setTimeout(startRequest, pollInterval);
+		}
 	}
 
 	chrome.extension.onRequest.addListener(
